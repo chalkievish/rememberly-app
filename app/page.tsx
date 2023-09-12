@@ -10,56 +10,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { TypographyH1 } from "@/components/typography/typographyH1"
 import { MoreHorizontal, Users2 } from "lucide-react"
+
 import FriendData from "@/public/friendData"
+import { calculateDaysAgo, formatDateBasedOnDistance } from "@/lib/utils"
 
 const friendData = FriendData
-
-// Helper function to calculate the number of days between two dates
-function calculateDaysAgo(dateString: string): number {
-  const currentDate = new Date();
-  const lastMessagedDate = new Date(dateString);
-  const timeDifference = currentDate.getTime() - lastMessagedDate.getTime();
-  const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-  return daysAgo;
-}
-
-// Helper function to format a date relative to today
-function formatDateBasedOnDistance(inputDate: string): string {
-  // Parse the input date string
-  const inputDateObj = new Date(inputDate);
-  const currentDate = new Date();
-
-  // Calculate the difference in days between the two dates
-  const timeDifference = inputDateObj.getTime() - currentDate.getTime();
-  const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-
-  if (daysDifference <= 0) {
-    // Handle dates in the past (not expected in this case)
-    return "Invalid date";
-  } else if (daysDifference <= 7) {
-    // Within the current week
-    const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][inputDateObj.getUTCDay()];
-    return `This ${dayOfWeek}`;
-  } else if (daysDifference <= 14) {
-    // On or before the Sunday of the next week
-    const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][inputDateObj.getUTCDay()];
-    return `Next ${dayOfWeek}`;
-  } else {
-    // After the Sunday of the next week
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return inputDateObj.toLocaleDateString(undefined, options);
-  }
-}
-
 
 export default function Home() {
   return (
@@ -81,11 +42,8 @@ export default function Home() {
           <DropdownMenu>
             <DropdownMenuTrigger><Button variant="outline">Sort</Button></DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Sort</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Recently spoken to</DropdownMenuItem>
-              <DropdownMenuItem>Oldest spoken to</DropdownMenuItem>
-              <DropdownMenuItem>Favourites</DropdownMenuItem>
+              <DropdownMenuItem>Recent</DropdownMenuItem>
+              <DropdownMenuItem>Oldest</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
